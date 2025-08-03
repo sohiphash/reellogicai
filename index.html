@@ -1,147 +1,111 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ReelLogic AI - ابدأ الآن</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReelLogic AI</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
       margin: 0;
       padding: 0;
-      direction: rtl;
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #000428, #004e92);
-      color: #fff;
+    }
+    header {
+      background-color: #1e1e1e;
+      padding: 20px;
       text-align: center;
-      min-height: 100vh;
+    }
+    header h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    header p {
+      font-size: 1em;
+      color: #aaa;
+    }
+    .container {
+      padding: 20px;
+    }
+    .section-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #00ffe0;
+    }
+    form {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 10px;
     }
-
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 20px;
-      margin-bottom: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    button {
-      background-color: #28a745;
-      color: white;
+    input, select, button {
+      padding: 10px;
       border: none;
-      padding: 15px 35px;
-      font-size: 20px;
       border-radius: 8px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #00ffe0;
+      color: black;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
     }
-
     button:hover {
-      background-color: #218838;
+      background-color: #00d8c0;
     }
-
-    #videoContainer {
-      display: none;
-      margin-top: 40px;
-    }
-
-    video {
-      margin-top: 20px;
-      max-width: 90%;
-      border: 3px solid #fff;
-      border-radius: 10px;
-    }
-
-    a.download {
-      display: block;
-      margin-top: 20px;
-      font-size: 18px;
-      color: #ffd700;
-      text-decoration: underline;
-    }
-
-    footer {
-      margin-top: auto;
+    .footer {
+      text-align: center;
       padding: 20px;
-      font-size: 14px;
-      opacity: 0.6;
+      font-size: 0.9em;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎬 منصة ReelLogic AI</h1>
-  <p>أنشئ فيديو احترافي تلقائيًا بضغطة زر باستخدام الذكاء الاصطناعي</p>
+  <header>
+    <h1>ReelLogic AI</h1>
+    <p>Generate viral AI reels in seconds – with voice, images & auto subtitles</p>
+  </header>
 
-  <button id="startBtn">ابدأ الآن</button>
+  <div class="container">
+    <div class="section-title">🎬 Auto Reels Generator</div>
+    <form onsubmit="generateReel(event)">
+      <input type="text" placeholder="Enter your video idea..." id="idea" required />
+      <select id="voice">
+        <option value="male">Male Voice</option>
+        <option value="female">Female Voice</option>
+      </select>
+      <select id="platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="youtube">YouTube Shorts</option>
+      </select>
+      <button type="submit">Start Generating</button>
+    </form>
 
-  <div id="videoContainer">
-    <h2>✅ تم إنشاء الفيديو!</h2>
-    <video id="video" controls></video>
-    <a id="downloadLink" class="download" download="video.webm">تحميل الفيديو</a>
+    <div id="result" style="margin-top: 20px;"></div>
   </div>
 
-  <footer>© 2025 ReelLogic AI - جميع الحقوق محفوظة</footer>
+  <div class="footer">
+    &copy; 2025 ReelLogic AI. All rights reserved.
+  </div>
 
   <script>
-    const startBtn = document.getElementById('startBtn');
-    const videoContainer = document.getElementById('videoContainer');
-    const video = document.getElementById('video');
-    const downloadLink = document.getElementById('downloadLink');
+    function generateReel(event) {
+      event.preventDefault();
+      const idea = document.getElementById('idea').value;
+      const voice = document.getElementById('voice').value;
+      const platform = document.getElementById('platform').value;
 
-    startBtn.addEventListener('click', async () => {
-      startBtn.disabled = true;
-      startBtn.textContent = "⏳ جاري إنشاء الفيديو...";
-
-      const blob = await createSampleVideo();
-      const url = URL.createObjectURL(blob);
-      video.src = url;
-      downloadLink.href = url;
-      videoContainer.style.display = 'block';
-
-      startBtn.textContent = "🎉 إنشاء فيديو جديد";
-      startBtn.disabled = false;
-    });
-
-    async function createSampleVideo() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 640;
-      canvas.height = 360;
-      const ctx = canvas.getContext('2d');
-      let frame = 0;
-      const stream = canvas.captureStream(30);
-      const recorder = new MediaRecorder(stream);
-      const chunks = [];
-
-      recorder.ondataavailable = e => chunks.push(e.data);
-      recorder.start();
-
-      return new Promise(resolve => {
-        const interval = setInterval(() => {
-          ctx.fillStyle = '#111';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = '#fff';
-          ctx.font = '26px Tahoma';
-          ctx.fillText('فيديو رقمي - فريم: ' + frame, 200, 180);
-          frame++;
-          if (frame > 90) {
-            clearInterval(interval);
-            recorder.stop();
-          }
-        }, 1000 / 30);
-
-        recorder.onstop = () => {
-          const blob = new Blob(chunks, { type: 'video/webm' });
-          resolve(blob);
-        };
-      });
+      document.getElementById('result').innerHTML = `
+        <p>🎉 Video is being generated using your idea: <strong>${idea}</strong></p>
+        <p>🎤 Voice selected: ${voice}</p>
+        <p>📱 Platform: ${platform}</p>
+        <p>✅ You will be able to download it soon...</p>
+      `;
     }
   </script>
+
 </body>
 </html>
