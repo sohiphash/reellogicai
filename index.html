@@ -2,56 +2,111 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>منشئ الفيديو التلقائي</title>
+  <title>ReelLogic AI - ابدأ الآن</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #111;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #000428, #004e92);
       color: #fff;
       text-align: center;
-      padding: 50px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     button {
-      padding: 10px 20px;
-      font-size: 18px;
       background-color: #28a745;
       color: white;
       border: none;
-      cursor: pointer;
+      padding: 15px 35px;
+      font-size: 20px;
       border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
     }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #videoContainer {
+      display: none;
+      margin-top: 40px;
+    }
+
     video {
       margin-top: 20px;
-      max-width: 100%;
+      max-width: 90%;
+      border: 3px solid #fff;
+      border-radius: 10px;
     }
+
     a.download {
       display: block;
       margin-top: 20px;
-      color: #00f;
+      font-size: 18px;
+      color: #ffd700;
       text-decoration: underline;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      font-size: 14px;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎬 منشئ الفيديو التلقائي</h1>
-  <p>اضغط على الزر لإنشاء فيديو تلقائيًا</p>
-  <button id="startBtn">ابدأ</button>
-  
-  <div id="videoContainer" style="display:none;">
-    <h2>تم إنشاء الفيديو!</h2>
+  <h1>🎬 منصة ReelLogic AI</h1>
+  <p>أنشئ فيديو احترافي تلقائيًا بضغطة زر باستخدام الذكاء الاصطناعي</p>
+
+  <button id="startBtn">ابدأ الآن</button>
+
+  <div id="videoContainer">
+    <h2>✅ تم إنشاء الفيديو!</h2>
     <video id="video" controls></video>
-    <a id="downloadLink" class="download" download="video.mp4">تحميل الفيديو</a>
+    <a id="downloadLink" class="download" download="video.webm">تحميل الفيديو</a>
   </div>
 
+  <footer>© 2025 ReelLogic AI - جميع الحقوق محفوظة</footer>
+
   <script>
-    document.getElementById('startBtn').addEventListener('click', async () => {
-      const videoBlob = await createSampleVideo();
-      const videoURL = URL.createObjectURL(videoBlob);
-      const video = document.getElementById('video');
-      video.src = videoURL;
-      document.getElementById('videoContainer').style.display = 'block';
-      document.getElementById('downloadLink').href = videoURL;
+    const startBtn = document.getElementById('startBtn');
+    const videoContainer = document.getElementById('videoContainer');
+    const video = document.getElementById('video');
+    const downloadLink = document.getElementById('downloadLink');
+
+    startBtn.addEventListener('click', async () => {
+      startBtn.disabled = true;
+      startBtn.textContent = "⏳ جاري إنشاء الفيديو...";
+
+      const blob = await createSampleVideo();
+      const url = URL.createObjectURL(blob);
+      video.src = url;
+      downloadLink.href = url;
+      videoContainer.style.display = 'block';
+
+      startBtn.textContent = "🎉 إنشاء فيديو جديد";
+      startBtn.disabled = false;
     });
 
     async function createSampleVideo() {
@@ -69,13 +124,13 @@
 
       return new Promise(resolve => {
         const interval = setInterval(() => {
-          ctx.fillStyle = 'black';
+          ctx.fillStyle = '#111';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = 'white';
-          ctx.font = '30px Arial';
-          ctx.fillText('فيديو رقم: ' + frame, 200, 180);
+          ctx.fillStyle = '#fff';
+          ctx.font = '26px Tahoma';
+          ctx.fillText('فيديو رقمي - فريم: ' + frame, 200, 180);
           frame++;
-          if (frame > 90) { // 3 ثواني تقريباً
+          if (frame > 90) {
             clearInterval(interval);
             recorder.stop();
           }
@@ -89,4 +144,3 @@
     }
   </script>
 </body>
-</html>
