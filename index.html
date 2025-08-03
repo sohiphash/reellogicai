@@ -1,151 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ReelLogic AI - Auto Reels Generator</title>
-  <meta name="description" content="ReelLogic AI: Create, generate, and publish AI-powered Reels content to Instagram, TikTok, YouTube, and more." />
+  <meta charset="UTF-8">
+  <title>منشئ الفيديو التلقائي</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(120deg, #0f172a, #1e293b);
+      font-family: Arial, sans-serif;
+      background-color: #111;
       color: #fff;
-      overflow-x: hidden;
-    }
-
-    header {
-      padding: 30px;
       text-align: center;
-      background: #020617;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      padding: 50px;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.8em;
-      background: linear-gradient(90deg, #00f5a0, #00d9f5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .main {
-      padding: 50px 20px;
-      text-align: center;
-    }
-
-    .main h2 {
-      font-size: 2em;
-      margin-bottom: 15px;
-    }
-
-    .main p {
-      font-size: 1.2em;
-      max-width: 600px;
-      margin: auto;
-      color: #cbd5e1;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      margin-top: 50px;
-    }
-
-    .feature {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    .feature h3 {
-      margin-top: 0;
-      color: #00f5a0;
-    }
-
-    .btn {
-      margin-top: 40px;
-      padding: 14px 30px;
-      font-size: 1.1em;
-      background-color: #00f5a0;
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #28a745;
+      color: white;
       border: none;
-      color: #000;
-      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
+      border-radius: 8px;
     }
-
-    .btn:hover {
-      background-color: #00d9f5;
+    video {
+      margin-top: 20px;
+      max-width: 100%;
     }
-
-    footer {
-      margin-top: 60px;
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      background: #0f172a;
-      color: #64748b;
+    a.download {
+      display: block;
+      margin-top: 20px;
+      color: #00f;
+      text-decoration: underline;
     }
   </style>
-
-  <script>
-    // حماية من النقر بزر الفأرة الأيمن ونسخ الكود
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'c')) {
-        e.preventDefault();
-      }
-    });
-  </script>
 </head>
 <body>
 
-  <header>
-    <h1>ReelLogic AI</h1>
-    <p style="color:#94a3b8">Smart Reels Creation & Auto Publishing</p>
-  </header>
+  <h1>🎬 منشئ الفيديو التلقائي</h1>
+  <p>اضغط على الزر لإنشاء فيديو تلقائيًا</p>
+  <button id="startBtn">ابدأ</button>
+  
+  <div id="videoContainer" style="display:none;">
+    <h2>تم إنشاء الفيديو!</h2>
+    <video id="video" controls></video>
+    <a id="downloadLink" class="download" download="video.mp4">تحميل الفيديو</a>
+  </div>
 
-  <section class="main">
-    <h2>Automate Your Reels. Grow Smarter.</h2>
-    <p>
-      Generate AI-powered Reels with trending sounds, realistic voices, subtitles, and publish to Instagram, TikTok, and YouTube — all in one place.
-    </p>
+  <script>
+    document.getElementById('startBtn').addEventListener('click', async () => {
+      const videoBlob = await createSampleVideo();
+      const videoURL = URL.createObjectURL(videoBlob);
+      const video = document.getElementById('video');
+      video.src = videoURL;
+      document.getElementById('videoContainer').style.display = 'block';
+      document.getElementById('downloadLink').href = videoURL;
+    });
 
-    <div class="features">
-      <div class="feature">
-        <h3>🎬 Auto Reels Generator</h3>
-        <p>Create content automatically using AI based on your niche or trends.</p>
-      </div>
-      <div class="feature">
-        <h3>🗣️ Realistic Voice & Subtitles</h3>
-        <p>Add human-like voiceovers and auto subtitles in multiple languages.</p>
-      </div>
-      <div class="feature">
-        <h3>📅 Smart Scheduler</h3>
-        <p>Publish at the best time automatically or manually with a few clicks.</p>
-      </div>
-      <div class="feature">
-        <h3>🌐 Multilingual & Location-Based</h3>
-        <p>Support for multiple languages & best publish time by country.</p>
-      </div>
-      <div class="feature">
-        <h3>🚀 Invite System & Premium</h3>
-        <p>Earn rewards with invites, and access Pro features for advanced tools.</p>
-      </div>
-      <div class="feature">
-        <h3>🔐 Secure & Fast</h3>
-        <p>Top-notch protection from copying, tampering, and unauthorized edits.</p>
-      </div>
-    </div>
+    async function createSampleVideo() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 640;
+      canvas.height = 360;
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      const stream = canvas.captureStream(30);
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
 
-    <button class="btn" onclick="alert('Free Trial Activated!')">Start Free Trial</button>
-  </section>
+      recorder.ondataavailable = e => chunks.push(e.data);
+      recorder.start();
 
-  <footer>
-    &copy; 2025 ReelLogic AI — All rights reserved.
-  </footer>
+      return new Promise(resolve => {
+        const interval = setInterval(() => {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'white';
+          ctx.font = '30px Arial';
+          ctx.fillText('فيديو رقم: ' + frame, 200, 180);
+          frame++;
+          if (frame > 90) { // 3 ثواني تقريباً
+            clearInterval(interval);
+            recorder.stop();
+          }
+        }, 1000 / 30);
+
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          resolve(blob);
+        };
+      });
+    }
+  </script>
 </body>
 </html>
